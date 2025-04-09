@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		2CE0111D2DA5669300B29DC1 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 2CE0111C2DA5669300B29DC1 /* Alamofire */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		2CE010F62DA5636D00B29DC1 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -65,6 +69,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2CE0111D2DA5669300B29DC1 /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -125,6 +130,7 @@
 			);
 			name = StockPredictions;
 			packageProductDependencies = (
+				2CE0111C2DA5669300B29DC1 /* Alamofire */,
 			);
 			productName = StockPredictions;
 			productReference = 2CE010DE2DA5636B00B29DC1 /* StockPredictions.app */;
@@ -208,6 +214,9 @@
 			);
 			mainGroup = 2CE010D52DA5636B00B29DC1;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				2CE0111B2DA5669300B29DC1 /* XCRemoteSwiftPackageReference "Alamofire" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 2CE010DF2DA5636B00B29DC1 /* Products */;
 			projectDirPath = "";
@@ -314,10 +323,11 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.berriesinthebasket.StockPredictions;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,7";
+				TARGETED_DEVICE_FAMILY = 1;
 				XROS_DEPLOYMENT_TARGET = 2.0;
 			};
 			name = Debug;
@@ -354,10 +364,11 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.berriesinthebasket.StockPredictions;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,7";
+				TARGETED_DEVICE_FAMILY = 1;
 				XROS_DEPLOYMENT_TARGET = 2.0;
 			};
 			name = Release;
@@ -606,6 +617,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		2CE0111B2DA5669300B29DC1 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.10.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		2CE0111C2DA5669300B29DC1 /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2CE0111B2DA5669300B29DC1 /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 2CE010D62DA5636B00B29DC1 /* Project object */;
 }

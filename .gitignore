@@ -1,0 +1,35 @@
+APIKeys.swift
+
+# Xcode Derived Data and Build Files
+build/
+DerivedData/
+
+# Xcode Project Workspace
+*.xcworkspace
+!default.xcworkspace
+
+# Xcode User Data and Schemes
+*.xcuserdata
+*.xccheckout
+*.xcscmblueprint
+
+# Xcode Specific Settings Files
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.perspectivev3
+
+# CocoaPods
+Pods/
+
+# Carthage
+Carthage/Build/
+
+# Swift Package Manager
+.build/
+
+# Miscellaneous System Files
+.DS_Store
+.idea/
+*.swp
