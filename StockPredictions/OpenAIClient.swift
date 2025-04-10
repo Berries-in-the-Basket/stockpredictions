@@ -17,11 +17,11 @@ func callChatOpenAIAPI(prompt: String) async throws -> ChatResponse {
     ]
     
     let messages = [
-        ChatMessage(role: "system", content: "You are a helpful general knowledge expert. You reply with brief, to-the-point answers."),
+        ChatMessage(role: "system", content: "You are a trading guru. Given data on share prices based on the provided data, write a report of no more than 100 words describing the stocks performance and recommending whether to buy, hold or sell."),
         ChatMessage(role: "user", content: prompt)
     ]
-    
-    let chatRequest = ChatRequest(model: "gpt-4o", messages: messages, max_completion_tokens: 50)
+
+    let chatRequest = ChatRequest(model: "gpt-4o", messages: messages, max_completion_tokens: 150)
     
     // request using Alamofire
     let dataTask = AF.request(

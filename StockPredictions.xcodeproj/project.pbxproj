@@ -34,7 +34,7 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		2CE011072DA5636D00B29DC1 /* Exceptions for "StockPredictions" folder in "StockPredictions" target */ = {
+		2C3077BE2DA72E8100B6811C /* Exceptions for "StockPredictions" folder in "StockPredictions" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -47,7 +47,7 @@
 		2CE010E02DA5636B00B29DC1 /* StockPredictions */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				2CE011072DA5636D00B29DC1 /* Exceptions for "StockPredictions" folder in "StockPredictions" target */,
+				2C3077BE2DA72E8100B6811C /* Exceptions for "StockPredictions" folder in "StockPredictions" target */,
 			);
 			path = StockPredictions;
 			sourceTree = "<group>";

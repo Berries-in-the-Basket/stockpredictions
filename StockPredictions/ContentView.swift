@@ -7,6 +7,7 @@
 
 import SwiftUI
 import CoreData
+import Alamofire
 
 struct ContentView: View {
     @Environment(\.managedObjectContext) private var viewContext
@@ -22,6 +23,11 @@ struct ContentView: View {
     
     @State private var ticker = ""
     @State private var tickers: [String] = []
+    
+    @State private var stockData: [String: PolygonAggregatesResponse] = [:]
+    @State private var errorMessage: String?
+    
+    @State private var stockReport: String = ""
     
     var body: some View {
         VStack(spacing: 20) {
@@ -72,8 +78,37 @@ struct ContentView: View {
             Button(action: {
                 // Insert your report generation logic here.
                 print("Generating report for tickers: \(tickers)")
+                Task {
+                    do {
+                        let data = try await fetchStockData(for: tickers)
+                        let jsonData = try JSONEncoder().encode(data)
+                        if let jsonString = String(data: jsonData, encoding: .utf8) {
+                            let openAIResponse = try await callChatOpenAIAPI(prompt: jsonString)
+                            if let choice = openAIResponse.choices.first{
+                                // Update the UI on the main thread.
+                                await MainActor.run {
+                                    stockReport = choice.message.content
+    //                                add here update UI for the OpenAI report
+                                    isLoading = false
+                                }
+                            } else{
+                                stockReport = "No response received"
+                            }
+                        } else{
+                            await MainActor.run {
+                                stockReport = "Unable to decode response."
+                                isLoading = false
+                            }
+                        }
+                    } catch {
+                        await MainActor.run {
+                            errorMessage = error.localizedDescription
+                            isLoading = false
+                        }
+                    }
+                }
             }) {
-                Text("Generate Report")
+                Text(isLoading ? "Loading..." : "Generate Report")
                     .foregroundColor(.white)
                     .bold()
                     .frame(maxWidth: .infinity)
@@ -82,9 +117,63 @@ struct ContentView: View {
                     .cornerRadius(8)
             }
             
+            // Display the stock report
+            Text("Stock Report:")
+                .font(.headline)
+            ScrollView {
+                Text(stockReport)
+                    .font(.system(.body, design: .monospaced))
+                    .padding()
+            }
+            .frame(maxHeight: 300)
+            .background(Color.gray.opacity(0.05))
+            .cornerRadius(8)
+            
             Spacer()
         }
         .padding()
+    }
+    
+    func fetchStockData(for tickers: [String]) async throws -> [String: PolygonAggregatesResponse] {
+        var responses = [String: PolygonAggregatesResponse]()
+        let apiKey = "YOUR_API_KEY"  // Replace with your actual Polygon.io API key
+        
+        // Date formatter for the required "yyyy-MM-dd" format.
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        
+        // Compute today's date and the date 3 days ago.
+        let toDate = dateFormatter.string(from: Date())
+        guard let sevenDaysAgo = Calendar.current.date(byAdding: .day, value: -3, to: Date()) else {
+            throw NSError(domain: "DateError",
+                          code: 0,
+                          userInfo: [NSLocalizedDescriptionKey: "Could not compute 7 days ago date"])
+        }
+        let fromDate = dateFormatter.string(from: sevenDaysAgo)
+        
+        // Loop through each ticker to fetch its aggregated data.
+        for ticker in tickers {
+            // Build the API URL for each ticker.
+            let urlString = "https://api.polygon.io/v2/aggs/ticker/\(ticker)/range/1/day/\(fromDate)/\(toDate)?adjusted=true&sort=asc&limit=120&apiKey=\(APIKeys.polygonIoAPIKey)"
+            guard let url = URL(string: urlString) else {
+                print("Invalid URL for ticker: \(ticker)")
+                continue
+            }
+            
+            do {
+                // Request using Alamofire and decode the response into PolygonAggregatesResponse.
+                let response = AF.request(url, method: .get)
+                    .validate()
+                    .serializingDecodable(PolygonAggregatesResponse.self)
+                let result = try await response.value
+                responses[ticker] = result
+            } catch {
+                print("Error fetching data for \(ticker): \(error.localizedDescription)")
+            }
+        }
+        print(responses)
+        
+        return responses
     }
     
     
