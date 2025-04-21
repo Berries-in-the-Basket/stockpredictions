@@ -56,23 +56,28 @@ struct ContentView: View {
                 }
             }
             
-            // Label for the tickers display area.
-            Text("Entered Tickers:")
-                .font(.headline)
             
-            // A scrollable text area that displays all the tickers.
-            ScrollView {
-                HStack(alignment: .center, spacing: 5) {
-                    ForEach(tickers, id: \.self) { ticker in
-                        Text(ticker)
-                            .padding(.vertical, 4)
+                // Label for the tickers display area.
+                VStack {
+                    Text("Entered Tickers:")
+                        .font(.headline)
+                    if tickers != [] {
+                    // A scrollable text area that displays all the tickers.
+                    ScrollView {
+                        HStack(alignment: .center, spacing: 5) {
+                            ForEach(tickers, id: \.self) { ticker in
+                                Text(ticker)
+                                    .padding(.vertical, 4)
+                            }
+                        }
+                        .padding(5)
                     }
+                    .frame(width: 250, height: 80)
+                    .background(Color.gray.opacity(0.1))
+                    .cornerRadius(8)
                 }
-                .padding(5)
             }
-            .frame(maxHeight: 200)
-            .background(Color.gray.opacity(0.1))
-            .cornerRadius(8)
+          
             
             // The Generate Report button.
             Button(action: {
@@ -88,7 +93,7 @@ struct ContentView: View {
                                 // Update the UI on the main thread.
                                 await MainActor.run {
                                     stockReport = choice.message.content
-    //                                add here update UI for the OpenAI report
+                                    //                                add here update UI for the OpenAI report
                                     isLoading = false
                                 }
                             } else{
@@ -121,14 +126,17 @@ struct ContentView: View {
             // Display the stock report
             Text("Stock Report:")
                 .font(.headline)
-            ScrollView {
-                Text(stockReport)
-                    .font(.system(.body, design: .monospaced))
-                    .padding()
+            if stockReport != "" {
+                ScrollView {
+                    Text(stockReport)
+                        .font(.system(.body, design: .monospaced))
+                        .padding()
+                }
+                //            .frame(maxHeight: 300)
+                .background(Color.gray.opacity(0.05))
+                .cornerRadius(8)
             }
-            .frame(maxHeight: 300)
-            .background(Color.gray.opacity(0.05))
-            .cornerRadius(8)
+            
             
             Spacer()
         }
