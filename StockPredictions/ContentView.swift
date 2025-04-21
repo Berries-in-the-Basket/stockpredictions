@@ -83,6 +83,7 @@ struct ContentView: View {
             Button(action: {
                 // Insert your report generation logic here.
                 print("Generating report for tickers: \(tickers)")
+                isLoading = true
                 Task {
                     do {
                         let data = try await fetchStockData(for: tickers)
