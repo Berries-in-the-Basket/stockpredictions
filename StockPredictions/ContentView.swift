@@ -103,6 +103,7 @@ struct ContentView: View {
                     } catch {
                         await MainActor.run {
                             errorMessage = error.localizedDescription
+                            stockReport = errorMessage ?? ""
                             isLoading = false
                         }
                     }
@@ -136,7 +137,7 @@ struct ContentView: View {
     
     func fetchStockData(for tickers: [String]) async throws -> [String: PolygonAggregatesResponse] {
         var responses = [String: PolygonAggregatesResponse]()
-        let apiKey = "YOUR_API_KEY"  // Replace with your actual Polygon.io API key
+        let polygonApiKey = APIKeys.polygonIoAPIKey  // Replace with your actual Polygon.io API key
         
         // Date formatter for the required "yyyy-MM-dd" format.
         let dateFormatter = DateFormatter()
@@ -154,7 +155,7 @@ struct ContentView: View {
         // Loop through each ticker to fetch its aggregated data.
         for ticker in tickers {
             // Build the API URL for each ticker.
-            let urlString = "https://api.polygon.io/v2/aggs/ticker/\(ticker)/range/1/day/\(fromDate)/\(toDate)?adjusted=true&sort=asc&limit=120&apiKey=\(APIKeys.polygonIoAPIKey)"
+            let urlString = "https://api.polygon.io/v2/aggs/ticker/\(ticker)/range/1/day/\(fromDate)/\(toDate)?adjusted=true&sort=asc&limit=120&apiKey=\(polygonApiKey)"
             guard let url = URL(string: urlString) else {
                 print("Invalid URL for ticker: \(ticker)")
                 continue
