@@ -9,11 +9,10 @@ import Foundation
 import Alamofire
 
 func callChatOpenAIAPI(prompt: String) async throws -> ChatResponse {
-    let url = "https://api.openai.com/v1/chat/completions"
+    let url = "https://stocks-open-api-worker.code-ab9.workers.dev/"
 
     let headers: HTTPHeaders = [
-        "Content-Type": "application/json",
-        "Authorization": "Bearer \(APIKeys.openAIAPIKey)"
+        "Content-Type": "application/json"
     ]
     
     let messages = [

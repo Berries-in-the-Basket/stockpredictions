@@ -32,6 +32,8 @@ Carthage/Build/
 # Miscellaneous System Files
 .DS_Store
 .idea/
-*.swp
+*.swa
 
 xcdebugger/
+
+Cloudflare/

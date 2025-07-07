@@ -51,7 +51,9 @@ struct ContentView: View {
                     Text("Add")
                         .padding(.horizontal, 10)
                         .padding(.vertical, 8)
-                        .background(Color.gray.opacity(0.2))
+                        .foregroundColor(Color(red: 84/255, green: 22/255, blue: 144/255))
+                        .bold()
+                        .background(Color(red: 255/255, green: 205/255, blue: 56/255))
                         .cornerRadius(8)
                 }
             }
@@ -59,7 +61,7 @@ struct ContentView: View {
             
                 // Label for the tickers display area.
                 VStack {
-                    Text("Entered Tickers:")
+                    Text("Stocks:")
                         .font(.headline)
                     if tickers != [] {
                     // A scrollable text area that displays all the tickers.
@@ -67,10 +69,10 @@ struct ContentView: View {
                         HStack(alignment: .center, spacing: 5) {
                             ForEach(tickers, id: \.self) { ticker in
                                 Text(ticker)
-                                    .padding(.vertical, 4)
+//                                    .padding(.vertical, 4)
                             }
                         }
-                        .padding(5)
+                        .padding()
                     }
                     .frame(width: 250, height: 80)
                     .background(Color.gray.opacity(0.1))
@@ -116,11 +118,11 @@ struct ContentView: View {
                 }
             }) {
                 Text(isLoading ? "Loading..." : "Generate Report")
-                    .foregroundColor(.white)
+                    .foregroundColor(Color(red: 84/255, green: 22/255, blue: 144/255))
                     .bold()
                     .frame(maxWidth: .infinity)
                     .padding()
-                    .background(Color.blue)
+                    .background(Color(red: 255/255, green: 205/255, blue: 56/255))
                     .cornerRadius(8)
             }
             
@@ -146,7 +148,6 @@ struct ContentView: View {
     
     func fetchStockData(for tickers: [String]) async throws -> [String: PolygonAggregatesResponse] {
         var responses = [String: PolygonAggregatesResponse]()
-        let polygonApiKey = APIKeys.polygonIoAPIKey  // Replace with your actual Polygon.io API key
         
         // Date formatter for the required "yyyy-MM-dd" format.
         let dateFormatter = DateFormatter()
@@ -164,10 +165,9 @@ struct ContentView: View {
         // Loop through each ticker to fetch its aggregated data.
         for ticker in tickers {
             // Build the API URL for each ticker.
-            let urlString = "https://api.polygon.io/v2/aggs/ticker/\(ticker)/range/1/day/\(fromDate)/\(toDate)?adjusted=true&sort=asc&limit=120&apiKey=\(polygonApiKey)"
+            let urlString = "https://stocks-polygon-api-worker.code-ab9.workers.dev/?ticker=\(ticker)&startDate=\(fromDate)&endDate=\(toDate)"
             guard let url = URL(string: urlString) else {
-                print("Invalid URL for ticker: \(ticker)")
-                continue
+                throw PolygonAPIWorkerError.genericError
             }
             
             do {
@@ -179,6 +179,7 @@ struct ContentView: View {
                 responses[ticker] = result
             } catch {
                 print("Error fetching data for \(ticker): \(error.localizedDescription)")
+                throw PolygonAPIWorkerError.genericError
             }
         }
         print(responses)
@@ -225,6 +226,14 @@ private let itemFormatter: DateFormatter = {
     formatter.timeStyle = .medium
     return formatter
 }()
+
+enum PolygonAPIWorkerError: LocalizedError{
+    case genericError
+    
+    var errorDescription: String? {
+        "Failed to fetch stocks data."
+    }
+}
 
 #Preview {
     ContentView().environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
